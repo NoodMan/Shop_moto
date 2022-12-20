@@ -17,7 +17,7 @@
         {% for photo in photos %}
             <tr>
                 <td>{{ photo.id }}</td>
-                <td>{{ photo.lien }}</td>
+                <td><img src="{{ asset('Photo_moto/'~photo.lien) }}" width="80"</td><td>
                 <td>
                     <a href="{{ path('app_photo_show', {'id': photo.id}) }}">show</a>
                     <a href="{{ path('app_photo_edit', {'id': photo.id}) }}">edit</a>

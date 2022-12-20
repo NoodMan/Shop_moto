@@ -35,6 +35,22 @@ class PhotoController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $file=$form->get('lien')->getData();
+            if($file !='null')
+            {
+                //je definit le dossier de destination
+                $path='/';
+                // je definit le nom final de l'image
+                $filename=uniqid().'.'.$file->guessExtension();
+                //upload de l'image dans le dpssier public films
+                $file->move($this->getParameter('photo_directory').$path,$filename
+
+            );
+            //je stock le liens dans le bdd films
+            $photo->setLien($filename);
+            }
+
             $photoRepository->add($photo, true);
 
             return $this->redirectToRoute('app_photo_index', [], Response::HTTP_SEE_OTHER);
@@ -61,10 +77,36 @@ class PhotoController extends AbstractController
      */
     public function edit(Request $request, Photo $photo, PhotoRepository $photoRepository): Response
     {
+        $imageExit=$photo->getLien();
         $form = $this->createForm(PhotoType::class, $photo);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $file=$form->get('lien')->getData();
+                if($file !='null')
+            
+                {
+                    // je suprimme l'image  existante
+                   
+                    $lienImageExist = '../public/Photo_moto/'.$imageExit;
+                    if(file_exists($lienImageExist))
+                    {
+                    unlink($lienImageExist);
+                    }
+
+                    //je definit le dossier de destination
+                    $path='/';
+                    // je definit le nom final de l'image
+                    $filename=uniqid().'.'.$file->guessExtension();
+                    //upload de l'image dans le dpssier public films
+                    $file->move($this->getParameter('photo_directory').$path,$filename
+
+                );
+                //je stock le liens dans le bdd films
+                $photo->setLien($filename);
+                }
+            
             $photoRepository->add($photo, true);
 
             return $this->redirectToRoute('app_photo_index', [], Response::HTTP_SEE_OTHER);
@@ -76,15 +118,17 @@ class PhotoController extends AbstractController
         ]);
     }
 
+
     /**
      * @Route("/{id}", name="app_photo_delete", methods={"POST"})
      */
     public function delete(Request $request, Photo $photo, PhotoRepository $photoRepository): Response
     {
+        								
         if ($this->isCsrfTokenValid('delete'.$photo->getId(), $request->request->get('_token'))) {
             $photoRepository->remove($photo, true);
         }
-
+    
         return $this->redirectToRoute('app_photo_index', [], Response::HTTP_SEE_OTHER);
     }
 }
