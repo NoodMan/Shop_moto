@@ -4,11 +4,13 @@ namespace App\Entity;
 
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -36,12 +38,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
     /**
-     * @ORM\ManyToOne(targetEntity=adresse::class, inversedBy="users")
+     * @ORM\ManyToOne(targetEntity=Adresse::class, inversedBy="users")
      */
     private $adresse;
 
     /**
-     * @ORM\ManyToOne(targetEntity=commande::class, inversedBy="users")
+     * @ORM\ManyToOne(targetEntity=Commande::class, inversedBy="users")
      */
     private $commande;
 
