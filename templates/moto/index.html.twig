@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Moto index{% endblock %}
+
+{% block body %}
+    <h1>Liste des motos</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>Description</th>
+                <th>KM</th>
+                <th>Prix</th>
+                <th>DateImat</th>
+                <th>Puissance</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for moto in motos %}
+            <tr>
+                <td>{{ moto.id }}</td>
+                <td>{{ moto.Titre }}</td>
+                <td>{{ moto.Description }}</td>
+                <td>{{ moto.KM }}</td>
+                <td>{{ moto.Prix }}</td>
+                <td>{{ moto.DateImat ? moto.DateImat|date('Y-m-d') : '' }}</td>
+                <td>{{ moto.Puissance }}</td>
+                <td>
+                    <a href="{{ path('app_moto_show', {'id': moto.id}) }}">show</a>
+                    <a href="{{ path('app_moto_edit', {'id': moto.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_moto_new') }}">Create new</a>
+{% endblock %}
